@@ -1,0 +1,132 @@
+<% layout('/layouts/boilerplate') %>
+    <script>
+        const mapToken = '<%= process.env.MAP_TOKEN %>'
+        const coordinates = JSON.stringify(postdata.geometry.coordinates);
+
+    </script>
+
+    <body>
+
+        <div class="row mt-3">
+            <div class="col-8 offset-2">
+                <h3 class="card-title">
+                    <%= postdata.title %>
+                </h3>
+            </div>
+
+            <div class="col-8 offset-2">
+                <div class="card">
+                    <img src="<%= postdata.image.url %>" class="card-img-top show-img" alt="listing-image">
+
+
+                    <!-- card body -->
+                    <div class="card-body">
+                        <p class="card-text">
+                            Owned by <%= postdata.owner.username %>
+                        </p>
+
+                        <p class="card-text">
+                            <%= postdata.description %>
+                        </p>
+                        <p class="card-text"><b>Location:</b>
+                            <%= postdata.location %>
+                        </p>
+                        <p class="card-text"><b>Country:</b>
+                            <%= postdata.country %>
+                        </p>
+                        <p class="card-text"><small class="text-body-secondary">Price: <%= postdata.price %></small></p>
+
+                        <% if(currUser && currUser._id.equals(postdata.owner._id)){%>
+
+                            <!-- button-->
+                            <div class="btns">
+                                <a href="/listing/<%= postdata.id %>/update" class="btn btn-orange">Edit</a>
+
+                                <form action="/listing/<%= postdata.id %>/?_method=DELETE" method="post">
+                                    <button class="btn btn-dark">Delete</button>
+                                </form>
+                            </div>
+
+                            <% }%>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+
+
+            <!-- review -->
+            <div class="review col-8 offset-2">
+                <%if(currUser){%>
+                    <form action="/listing/<%= postdata.id %>/review" method="post" class="needs-validation" novalidate>
+
+                        <div>
+                            <label for="range4" class="form-label">Leave a Review</label><br>
+                            <label for="range4" class="form-label">Rating</label>
+
+                            <fieldset class="starability-slot">
+
+                                <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked
+                                    aria-label="No rating." />
+                                <input type="radio" id="first-rate1" name="rating" value="1" />
+                                <label for="first-rate1" title="Terrible">1 star</label>
+                                <input type="radio" id="first-rate2" name="rating" value="2" />
+                                <label for="first-rate2" title="Not good">2 stars</label>
+                                <input type="radio" id="first-rate3" name="rating" value="3" />
+                                <label for="first-rate3" title="Average">3 stars</label>
+                                <input type="radio" id="first-rate4" name="rating" value="4" />
+                                <label for="first-rate4" title="Very good">4 stars</label>
+                                <input type="radio" id="first-rate5" name="rating" value="5" />
+                                <label for="first-rate5" title="Amazing">5 stars</label>
+                            </fieldset>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Comment</label>
+                            <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="3"
+                                required></textarea>
+                            <div class="invalid-feedback">
+                                Please Enter Comment.
+                            </div>
+                        </div>
+                        <button class="btn btn-orange">Submit</button>
+                    </form>
+                    <%}%>
+                        <!--All review data -->
+                        <div class=" row row-cols-lg-2 row-cols-md-2 row-cols-sm-1 mt-3 g-3">
+                            <% for(data of postdata.review){ %>
+
+                                <div class="col">
+                                    <div class="card border ">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@<%=data.author.username%>
+                                            </h5>
+
+                                            <p class="starability-result card-text" data-rating='<%= data.rating %>'
+                                                </p>
+                                            <p class="card-text">
+                                                <%=data.comment%>
+                                            </p>
+                                            <form
+                                                action="/listing/<%= postdata.id %>/review/<%= data.id %>?_method=DELETE"
+                                                method="post">
+                                                <button class="btn btn-dark">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%} %>
+
+
+                        </div>
+
+            </div>
+            <div class="col-6 offset-2">
+                <h3>Where you’ll be
+                </h3>
+                <div id="map"></div>
+            </div>
+        </div>
+
+    </body>
+    <script src="/js/map.js"></script>

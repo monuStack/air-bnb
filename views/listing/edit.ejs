@@ -1,0 +1,60 @@
+<% layout('/layouts/boilerplate') %>
+
+    <body>
+
+        <div class="row">
+            <div class="col-8 offset-2">
+                <h3>Edit Post</h3>
+                <form action="/listing/<%=postdata._id%>/?_method=PATCH" method="post" class="needs-validation"
+                    novalidate enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input name="title" class="form-control" placeholder="Enter Title of Post"
+                            value="<%=postdata.title%>" required></input>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" class="form-control" placeholder="Enter Description of Post"
+                            required><%= postdata.description %></textarea>
+                    </div>
+                    <div class="mb-3">
+                        Orignal Listing Image <br>
+                        <img src="<%=orignalImageUrl%>"></img>
+
+                    </div> 
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">New Upload Image</label>
+                        <input type="file" name="image" class="form-control"></input>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label for="price" class="form-label">Price</label>
+                            <input name="price" type="number" class="form-control" placeholder="price"
+                                value="<%= postdata.price %>"></input>
+                        </div>
+                        <div class="mb-3 col-md-8">
+                            <label for="Country" class="form-label">Country</label>
+                            <input name="country" class="form-control" placeholder="Enter Title of country"
+                                value="<%= postdata.country %>"></input>
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <textarea name="location" class="form-control" placeholder="Enter location"
+                            required> <%= postdata.location %></textarea>
+                    </div>
+
+                    <br>
+                    <button class="btn edit-btn">Edit</button>
+                    <br><br><br>
+                </form>
+            </div>
+        </div>
+
+    </body>
